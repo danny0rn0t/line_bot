@@ -8,7 +8,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import *
-from Helper import Helper
+from Utils import Utils
 from User import User
 from Config import Config
 from line_token import CHANNEL_ACCESS_TOKEN, CHANNEL_SECRET
@@ -21,7 +21,7 @@ cache = Cache()
 cache.init_app(app=app, config={"CACHE_TYPE": "filesystem",'CACHE_DIR': '/tmp'})
 cache.delete("users_data")
 config = Config()
-helper = Helper(config)
+utils = Utils(config)
 
 # Channel Access Token
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
@@ -77,7 +77,7 @@ def handle_text_message(event):
         if user_id not in users_data:
             users_data[user_id] = User(user_id)
         user = users_data[user_id]
-        reply_msg = helper.query_dialogue(user, event.message.text)
+        reply_msg = utils.query_dialogue(user, event.message.text)
         line_bot_api.reply_message(event.reply_token, reply_msg)
         cache.set("users_data", users_data)
 
@@ -107,7 +107,7 @@ def handle_image_message(event):
     os.rename(tempfile_path, dist_path)
     full_path = img_tmp_dir + dist_name
     # print(full_path, flush=True)
-    reply_msg = helper.query_image(user, full_path)
+    reply_msg = utils.query_image(user, full_path)
     line_bot_api.reply_message(event.reply_token, reply_msg)
 
 

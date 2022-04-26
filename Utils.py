@@ -8,7 +8,7 @@ import random
 from linebot.models import *
 from Config import Config
 
-class Helper:
+class Utils:
     def __init__(self, config: Config):
         self.config = config
     def query_dialogue(self, user: User, text: str):
